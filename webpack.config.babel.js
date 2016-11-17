@@ -1,14 +1,13 @@
-import webpack from 'webpack'
-import HtmlWebpackPlugin from 'html-webpack-plugin'
-import BrowserSyncPlugin from 'browser-sync-webpack-plugin'
-import path from 'path'
-import {version} from './package.json'
+import webpack from 'webpack';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import BrowserSyncPlugin from 'browser-sync-webpack-plugin';
+import path from 'path';
 
 const HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
   template: __dirname + '/src/index.html',
   filename: 'index.html',
   inject: 'body'
-})
+});
 
 const BrowserSyncPluginConfig = new BrowserSyncPlugin({
   host: 'localhost',
@@ -29,6 +28,11 @@ let plugins = [HTMLWebpackPluginConfig, BrowserSyncPluginConfig, WebpackProvider
 
 let loaders = [
   {
+    test: /\.jsx$|\.js$/,
+    loader: 'eslint-loader',
+    enforce: 'pre',
+    exclude: /node_modules/
+  }, {
     test: /.jsx?$/,
     loader: 'babel-loader',
     exclude: /node_modules/
@@ -59,7 +63,7 @@ let loaders = [
   }
 ]
 
-let config = {
+const config = {
   entry: './src/index.jsx',
   output: {
     path: __dirname + '/docs',
@@ -73,6 +77,9 @@ let config = {
     inline: true
   },
   resolve: {
+    extensions: [
+      '.js', '.jsx'
+    ],
     modules: [path.resolve('./src'), path.resolve('./node_modules')]
   },
   module: {
